@@ -190,7 +190,16 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-
+        if event.type == spawn_pipe and choose_skin and game_play:    #Cho ống xuất hiện
+            pipe_list.extend(create_pipe())
+            
+        if event.type == bird_flap and game_play:   #Chim đập cánh
+            if bird_index < 2:
+                bird_index += 1
+            else:
+                bird_index = 0
+            bird, bird_rect = bird_animation()
+            
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE and show_start_screen:
                 screen_start_rect.centerx = 1000
@@ -226,7 +235,16 @@ while True:
                     bird_mid = pygame.image.load(r"flappy-bird-assets-master\sprites\bluebird-midflap.png").convert_alpha()
                     bird_up = pygame.image.load(r"flappy-bird-assets-master\sprites\bluebird-upflap.png").convert_alpha()
                     bird_down = pygame.image.load(r"flappy-bird-assets-master\sprites\bluebird-downflap.png").convert_alpha()
-                   
+                    
+                    bird_mid = pygame.transform.scale_by(bird_mid, 1.2)
+                    bird_up = pygame.transform.scale_by(bird_up, 1.2)
+                    bird_down = pygame.transform.scale_by(bird_down, 1.2)
+
+                    bird_list = [bird_down, bird_mid, bird_down]
+                    bird_index = 0
+                    bird = bird_list[bird_index]
+                    bird_rect = bird.get_rect(center = (50, (614 - 134)/2))
+                    
                     choose_skin = True
                     show_choose_skin_screen = False
                 if pointer_rect.centerx == redbird_rect.centerx + 5:
@@ -234,6 +252,15 @@ while True:
                     bird_up = pygame.image.load(r"flappy-bird-assets-master\sprites\redbird-upflap.png").convert_alpha()
                     bird_down = pygame.image.load(r"flappy-bird-assets-master\sprites\redbird-downflap.png").convert_alpha()
                    
+                    bird_mid = pygame.transform.scale_by(bird_mid, 1.2)
+                    bird_up = pygame.transform.scale_by(bird_up, 1.2)
+                    bird_down = pygame.transform.scale_by(bird_down, 1.2)
+
+                    bird_list = [bird_down, bird_mid, bird_down]
+                    bird_index = 0
+                    bird = bird_list[bird_index]
+                    bird_rect = bird.get_rect(center = (50, (614 - 134)/2))
+
                     choose_skin = True
                     show_choose_skin_screen = False
                 if pointer_rect.centerx == yellowbird_rect.centerx + 5:
@@ -241,18 +268,18 @@ while True:
                     bird_up = pygame.image.load(r"flappy-bird-assets-master\sprites\yellowbird-upflap.png").convert_alpha()
                     bird_down = pygame.image.load(r"flappy-bird-assets-master\sprites\yellowbird-downflap.png").convert_alpha()
                     
+                    bird_mid = pygame.transform.scale_by(bird_mid, 1.2)                   
+                    bird_up = pygame.transform.scale_by(bird_up, 1.2)
+                    bird_down = pygame.transform.scale_by(bird_down, 1.2)
+
+                    bird_list = [bird_down, bird_mid, bird_down]
+                    bird_index = 0
+                    bird = bird_list[bird_index]
+                    bird_rect = bird.get_rect(center = (50, (614 - 134)/2))
+
                     choose_skin = True
                     show_choose_skin_screen = False
-                               
-        if event.type == spawn_pipe and choose_skin and game_play:    #Cho ống xuất hiện
-            pipe_list.extend(create_pipe())
-            
-        if event.type == bird_flap and game_play:   #Chim đập cánh
-            if bird_index < 2:
-                bird_index += 1
-            else:
-                bird_index = 0
-            bird, bird_rect = bird_animation()
+
      # Cập nhật thời gian
     time_counter += pygame.time.get_ticks() - start_time
     start_time = pygame.time.get_ticks()
