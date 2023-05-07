@@ -28,11 +28,9 @@ show_choose_skin_screen = False
 is_day = True
 time_counter = 0
 start_time = pygame.time.get_ticks() 
-#trọng lực
-p = 0.15
-#Điểm của game
-score = 0   #Khởi tạo điểm của game
-high_score = 0  #Khởi tạo điểm cao nhất
+p = 0.15    #Trọng lực
+score = 0   #Điểm
+high_score = 0  #Điểm cao nhất
 game_font = pygame.font.Font(r'flappy-bird-assets-master\04B_19__.TTF', 40)
 
 #Icon game
@@ -46,9 +44,8 @@ background = pygame.transform.scale(background, (346, 614))
  
 #Floor game
 floor = pygame.image.load(r"flappy-bird-assets-master\sprites\base.png").convert()
-#Chỉnh floor size lớn hơn
 floor = pygame.transform.scale(floor, (346, 134))
-floor_x = 0 #Biến x của floor
+floor_x = 0 #Tọa độ x của floor
 #Hàm vẽ floor
 def draw_floor():
     global floor_x
@@ -66,6 +63,7 @@ bird_down = pygame.image.load(r"flappy-bird-assets-master\sprites\bluebird-downf
 bird_mid = pygame.transform.scale_by(bird_mid, 1.2)
 bird_up = pygame.transform.scale_by(bird_up, 1.2)
 bird_down = pygame.transform.scale_by(bird_down, 1.2)
+
 bird_list = [bird_down, bird_mid, bird_down]
 bird_index = 0
 bird = bird_list[bird_index]
@@ -133,8 +131,6 @@ def draw_pipe(pipes):
         else:
             flip_pipe = pygame.transform.flip(pipe_surface, False, True)
             screen.blit(flip_pipe, pipe)
-
-
 #Tạo timer
 spawn_pipe = pygame.USEREVENT
 pygame.time.set_timer(spawn_pipe, 1000)
@@ -148,9 +144,6 @@ screen_over_rect = screen_over.get_rect(center = (screen.get_rect().center))
 screen_start = pygame.image.load(r'flappy-bird-assets-master\sprites\message.png')
 screen_start = pygame.transform.scale_by(screen_start, 1.2)
 screen_start_rect = screen_start.get_rect(center = (screen.get_rect().center))
-
-
-
 
 #Hàm hiện điểm
 def score_view(game_state):
@@ -250,8 +243,7 @@ while True:
                     
                     choose_skin = True
                     show_choose_skin_screen = False
-                
-                
+                               
         if event.type == spawn_pipe and choose_skin and game_play:    #Cho ống xuất hiện
             pipe_list.extend(create_pipe())
             
@@ -280,15 +272,15 @@ while True:
 
     #Thêm sàn    
     draw_floor()
-
+    
+    #Vẽ màn hình bắt đầu
     screen.blit(screen_start, screen_start_rect)
     
     if choose_skin == False and show_start_screen == False:
         draw_choose_skin_screen()
         show_choose_skin_screen = True
 
-    if game_play and show_start_screen == False and choose_skin:
-        
+    if game_play and show_start_screen == False and choose_skin:       
         #Thêm chim vào game:
         rotated_bird = rotate_bird(bird)
         screen.blit(rotated_bird, bird_rect)
@@ -297,9 +289,11 @@ while True:
         
         #Ống
         pipe_list = move_pipe(pipe_list)
-        draw_pipe(pipe_list)\
-        #sàn
+        draw_pipe(pipe_list)
+        
+        #Vẽ lại sàn
         draw_floor()
+        
         #Xử lý ghi điểm
         bird_mid_pos = bird_rect.x + bird_rect.width / 2
         for pipe in pipe_list:
@@ -307,10 +301,12 @@ while True:
             if pipe_mid_pos <=  bird_mid_pos <=  pipe_mid_pos:
                 score += 0.5
                 pygame.mixer.Sound.play(point)
+                
         #Cập nhật điểm cao nhất
         if score > high_score:
             high_score = score
             write_high_score('high_score.txt')
+            
         #Thêm score vào màn hình
         score_view(game_play)
         
